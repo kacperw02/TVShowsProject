@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>TV Show List</title>
+    <link rel="stylesheet" href="/css/style-home.css">
+</head>
+<body>
+<div class="container">
+    <h1>TV Show List</h1>
+
+    <!-- Formularz wyszukiwania po nazwie -->
+    <form method="get" action="/">
+        <label for="name">Search by Name:</label>
+        <input type="text" id="name" name="name" th:value="${searchedName}" placeholder="Enter show name">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Formularz filtrowania po gatunku -->
+    <form method="get" action="/">
+        <label for="genre">Filter by Genre:</label>
+        <select id="genre" name="genre">
+            <option value="">-- All Genres --</option>
+            <option th:each="genre : ${genres}" th:value="${genre}" th:text="${genre}"
+                    th:selected="${genre == selectedGenre}"></option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- Komunikat, jeśli nie znaleziono seriali -->
+    <p class="not-found" th:if="${showsNotFound}">No shows found with the given criteria.</p>
+
+    <!-- Lista seriali -->
+    <div th:if="!${showsNotFound}">
+        <div th:each="show : ${shows}" class="show">
+            <!-- Obraz okładki -->
+            <img th:src="${show['image'] != null ? show['image']['medium'] : ''}" alt="Show Image">
+
+            <!-- Informacje o serialu -->
+            <div class="show-info">
+                <h2 th:text="${show['name']}"></h2>
+                <p class="genres" th:text="'Genres: ' + ${show['genres']}"></p>
+                <p th:if="${show['summary'] != null}" th:utext="${show['summary']}"></p>
+                <a th:href="@{/details(id=${show['id']})}">Details</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

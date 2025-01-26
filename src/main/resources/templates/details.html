@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${show['name']}">Show Details</title>
+    <link rel="stylesheet" href="/css/style-details.css">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <img th:src="${show['image'] != null ? show['image']['medium'] : ''}" alt="Show Image">
+        <div class="header-info">
+            <h1 th:text="${show['name']}"></h1>
+            <p class="genres" th:text="'Genres: ' + ${show['genres']}"></p>
+        </div>
+    </div>
+
+    <div class="details">
+        <p class="summary" th:utext="${show['summary']}"></p>
+        <p><strong>Language:</strong> <span th:text="${show['language']}"></span></p>
+        <p><strong>Status:</strong> <span th:text="${show['status']}"></span></p>
+        <p><strong>Premiered:</strong> <span th:text="${show['premiered']}"></span></p>
+        <p><strong>Ended:</strong> <span th:text="${show['ended'] != null ? show['ended'] : 'Ongoing'}"></span></p>
+    </div>
+
+    <div class="seasons">
+        <h2>Seasons</h2>
+        <ul>
+            <li th:each="season : ${show['_embedded']['seasons']}"
+                th:text="'Season ' + ${season['number']} + ' (' + ${season['episodeOrder']} + ' episodes)'"></li>
+        </ul>
+    </div>
+
+    <div class="cast">
+        <h2>Cast</h2>
+        <ul>
+            <li th:each="cast : ${show['_embedded']['cast']}"
+                th:text="${cast['person']['name']} + ' as ' + ${cast['character']['name']}"></li>
+        </ul>
+    </div>
+
+    <a href="/" class="back-button">Back to Shows</a>
+</div>
+</body>
+</html>
